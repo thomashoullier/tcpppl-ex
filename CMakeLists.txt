@@ -7,4 +7,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set (SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src/")
 
+# List of exercises as compilation targets
 add_executable(x_3_3 "${SRC_DIR}/x_3_3.cpp")
+add_executable(x_3_5 "${SRC_DIR}/x_3_5.cpp")
