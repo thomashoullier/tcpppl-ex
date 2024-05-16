@@ -28,6 +28,27 @@ bool exists_in_table(int v)
   return false;
 }
 
+/* UB3 */
+std::size_t f(int x) {
+  std::size_t a;
+  if (x) a = 42;
+  return a;
+}
+
+/* UB4 */
+int f2 () {
+  bool b = true;
+  unsigned char* p = reinterpret_cast<unsigned char*>(&b);
+  *p = 10;
+  return b == 0;
+}
+
+/* UB5 */
+int bar () {
+  int* p = nullptr;
+  return *p;
+}
+
 int main () {
   std::cout << "# UB1: signed overflow comparison" << std::endl;
   if (std::numeric_limits<int>::is_signed) {
@@ -40,4 +61,14 @@ int main () {
 
   std::cout << "# UB2: access out of bounds" << std::endl;
   std::cout << exists_in_table(145) << std::endl;
+
+  std::cout << "# UB3: uninitialized scalar" << std::endl;
+  std::cout << f(0) << std::endl;
+
+  std::cout << "# UB4: invalid scalar" << std::endl;
+  std::cout << f2() << std::endl;
+
+  std::cout << "# UB5: Null pointer dereference" << std::endl;
+  auto p = bar();
+  // std::cout << p << std::endl; // segfaults
 }
