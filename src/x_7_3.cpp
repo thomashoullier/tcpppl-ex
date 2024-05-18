@@ -4,9 +4,15 @@
 
 // The cppreference website lists some undefined behavior cases.
 // https://en.cppreference.com/w/cpp/language/ub
+// We can find an index of implementation-defined behavior in the C++
+// standard working draft.
 
+#include <cstddef>
 #include <iostream>
 #include <limits>
+#include <typeinfo>
+#include <climits>
+#include <cstdint>
 
 /* UB1 */
 int foo(int x) {
@@ -71,4 +77,24 @@ int main () {
   std::cout << "# UB5: Null pointer dereference" << std::endl;
   auto p = bar();
   // std::cout << p << std::endl; // segfaults
+
+  std::cout << "# ID1: Type of std::size_t" << std::endl;
+  std::size_t i;
+  std::cout << typeid(i).name() << std::endl;
+
+  std::cout << "# ID2: Number of bits in a char" << std::endl;
+  std::cout << CHAR_BIT << std::endl;
+
+  std::cout << "# ID3: Text of std::bad_alloc::what()" << std::endl;
+  std::bad_alloc e;
+  std::cout << e.what() << std::endl;
+
+  std::cout << "# ID4: Size of a long int" << std::endl;
+  long int li;
+  std::cout << sizeof(li) << std::endl;
+
+  std::cout << "$ ID5: Conversion of pointers to integer types" << std::endl;
+  int v {45};
+  int *pv {&v};
+  std::cout << "Value " << *pv << " at address " << reinterpret_cast<uintptr_t>(pv) << std::endl;
 }
